@@ -3,6 +3,8 @@ let mongo = require('mongodb');
 let bodyParser = require('body-parser');
 let path = require('path');
 
+let PORT = process.env.PORT || 3000;
+
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 let dbUrl="mongodb+srv://therealrahulsahu:rahulsahu1_@democluster.2u6fb.gcp.mongodb.net/board_infy?retryWrites=true&w=majority&connectTimeoutMS=9000000";
 let MClient = mongo.MongoClient;
@@ -114,6 +116,6 @@ app.get('/list', function (req, res) {
 	
 });
 
-let server = app.listen(3000, () => {
+let server = app.listen(PORT, () => {
   console.log("Server Started::::")
 });
