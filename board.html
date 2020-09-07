@@ -1,0 +1,119 @@
+<html>
+	<head>
+		<title>Todo</title>
+		<style>
+		body {
+		  font-family: Arial;
+		}
+
+		input[type=text], select {
+		  width: 100%;
+		  padding: 12px 20px;
+		  margin: 8px 0;
+		  display: block;
+		  border: 1px solid #ccc;
+		  border-radius: 4px;
+		  box-sizing: border-box;
+		}
+		
+		input[type=number], select {
+		  width: 100%;
+		  padding: 12px 20px;
+		  margin: 8px 0;
+		  display: block;
+		  border: 1px solid #ccc;
+		  border-radius: 4px;
+		  box-sizing: border-box;
+		}
+
+		input[type=submit] {
+		  width: 100%;
+		  background-color: #4CAF50;
+		  color: white;
+		  padding: 14px 20px;
+		  margin: 8px 0;
+		  border: none;
+		  border-radius: 4px;
+		  cursor: pointer;
+		}
+
+		input[type=submit]:hover {
+		  background-color: #45a049;
+		}
+
+		div.container {
+		  border-radius: 5px;
+		  background-color: #f2f2f2;
+		  padding: 20px;
+		  margin: 20px;
+		}
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+
+		td, th {
+		  border: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+		</style>
+	</head>
+	<body onload="getList()">
+    <div class="container" id="table_container"></div>
+		<div class="container">
+			<form  method="POST" action="/add">
+				<legend><h2>Todo Application</h2></legend>
+				<label for="task_name">Task Name: </label>
+				<input type="text" name="task_name" id="task_name" required/>
+				<label for="task_description">Task Description: </label>
+				<input type="text" name="task_description" id="task_description" required/>
+				<label for="creator">Creator: </label>
+				<input type="text" name="creator" id="creator" required/>
+				<label for="duration">Duration: </label>
+				<input type="number" name="duration" id="duration" min="0" max="1440" placeholder="minutes" required/>
+				<input type="submit" value="Add"/>
+			</form>
+		</div>
+		<script>
+			let fromJsonToTable = (json)=> {
+				let heading="<tr><th>Task Name</th><th>Task Description</th><th>Creator</th><th>Duration</th><th>Created At</th></tr>";
+				let rows="";
+				for(x in json){
+					let tuple = json[x];
+					let time = new Date(tuple['created_at']);
+					rows += "<tr>";
+					
+					rows += "<td>"+tuple['task_name']+"</td>";
+					rows += "<td>"+tuple['task_description']+"</td>";
+					rows += "<td>"+tuple['creator']+"</td>";
+					rows += "<td>"+tuple['duration']+"</td>";
+					rows += "<td>"+time+"</td>";
+					
+					rows += "</tr>";
+				}
+				return "<table>"+heading+rows+"</table>";
+			}
+			let getList = () => {
+				let table = document.getElementById("table_container");
+				const xhttp = new XMLHttpRequest();
+				
+				xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    table.innerHTML = fromJsonToTable(JSON.parse(this.responseText));
+					}
+				};
+				
+				xhttp.open("GET", "/list", true);
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhttp.send();
+			
+			}
+		</script>
+	</body>
+</html>
