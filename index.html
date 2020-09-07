@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Todo</title>
+		<title>Todo-Rahul Sahu</title>
 		<style>
 		body {
 		  font-family: Arial;
@@ -103,6 +103,7 @@
 				let table = document.getElementById("table_container");
 				const xhttp = new XMLHttpRequest();
 				
+				table.innerHTML = "<h3>Task List is Loading...</h3>";
 				xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     table.innerHTML = fromJsonToTable(JSON.parse(this.responseText));
