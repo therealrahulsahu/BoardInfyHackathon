@@ -1,1 +1,1 @@
-web: node board.js
+web: node index.js
